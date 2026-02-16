@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamrah ❤️ Abbas</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --pink: #ff4d6d; --dark-red: #800f2f; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #ffb3c1, #ff4d6d); color: white; text-align: center; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Lock Screen */
+        #lock-screen { position: fixed; inset: 0; background: radial-gradient(circle, #ff758f, #800f2f); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        input { padding: 12px; border-radius: 20px; border: 2px solid #fff; margin: 10px; text-align: center; font-size: 18px; width: 220px; outline: none; }
+        
+        /* Music Button */
+        #music-btn { background: white; color: var(--pink); border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* Timer & Grid */
+        #timer-container { background: rgba(255, 255, 255, 0.2); padding: 20px; margin: 10px auto; width: 85%; border-radius: 25px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); }
+        .timer-grid { display: flex; justify-content: center; gap: 15px; }
+        .timer-block span { display: block; font-size: 24px; font-weight: bold; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-width: 350px; margin: 20px auto; padding: 0 15px; }
+        .card { aspect-ratio: 1/1; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; cursor: pointer; border: 3px solid #ff4d6d; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        /* Popups */
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: #800f2f; padding: 25px; border-radius: 30px; display: none; width: 85%; max-width: 320px; z-index: 999; border: 5px solid #ffb3c1; }
+        .popup img { width: 100%; border-radius: 20px; height: 250px; object-fit: cover; border: 2px solid #ff4d6d; }
+        button { background: #ff4d6d; color: white; padding: 14px 30px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; }
+        #player-wrapper { position: absolute; top: -1000px; visibility: hidden; }
+    </style>
+</head>
+<body>
+
+<div id="lock-screen">
+    <div style="font-size: 60px;">💖</div>
+    <h2>Hamrah ❤️ Abbas</h2>
+    <p>The year our story began...</p>
+    <input type="password" id="passInput" pattern="\d*" inputmode="numeric" placeholder="YYYY">
+    <button onclick="checkPass()">Unlock My Heart 🔓❤️</button>
+</div>
+
+<div id="main-content" style="display:none">
+    <h1 style="margin-top: 20px;">Hamrah ❤️ Abbas</h1>
+    
+    <button id="music-btn" onclick="playMusic()">🎵 Play Our Music ❤️</button>
+
+    <div id="timer-container">
+        <p>Together for:</p>
+        <div class="timer-grid">
+            <div class="timer-block"><span id="days">0</span>Days</div>
+            <div class="timer-block"><span id="hours">0</span>Hrs</div>
+            <div class="timer-block"><span id="mins">0</span>Min</div>
+            <div class="timer-block"><span id="secs">0</span>Sec</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="openMemory(1)">❤️</div>
+        <div class="card" onclick="openMemory(2)">🥰</div>
+        <div class="card" onclick="openMemory(3)">🌹</div>
+        <div class="card" onclick="openMemory(4)">🫂</div>
+        <div class="card" onclick="openMemory(5)">🔒</div>
+        <div class="card" onclick="openMemory(6)">💌</div>
+    </div>
+
+    <div id="player-wrapper"><div id="player"></div></div>
+
+    <div class="popup" id="popup">
+        <img id="photo" src="">
+        <p id="text"></p>
+        <button onclick="closePopup()">Close ❤️</button>
+    </div>
+
+    <div class="popup" id="final">
+        <p><b>May 18, 2023</b></p>
+        <p>Will you stay with me forever, Abbas? 💍</p>
+        <button onclick="yes()">YES ❤️</button>
+    </div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    let player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '0', width: '0',
+            videoId: 'L0MK7qz13bU', 
+            playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'L0MK7qz13bU' }
+        });
+    }
+
+    function playMusic() {
+        if(player && player.playVideo) {
+            player.playVideo();
+            document.getElementById("music-btn").innerText = "🎶 Music Playing...";
+        }
+    }
+
+    function checkPass() {
+        if(document.getElementById("passInput").value === "2023") {
+            document.getElementById("lock-screen").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
+            startTimer();
+            createHearts();
+        } else { alert("Wrong year! 🤫"); }
+    }
+
+    function startTimer() {
+        const startDate = new Date("May 18, 2023 00:00:00").getTime();
+        setInterval(() => {
+            const diff = new Date().getTime() - startDate;
+            document.getElementById("days").innerText = Math.floor(diff / 86400000);
+            document.getElementById("hours").innerText = Math.floor((diff % 86400000) / 3600000);
+            document.getElementById("mins").innerText = Math.floor((diff % 3600000) / 60000);
+            document.getElementById("secs").innerText = Math.floor((diff % 60000) / 1000);
+        }, 1000);
+    }
+
+    var memories = [
+        { photo: "1.PNG", text: "The day my heart chose you. ❤️" },
+        { photo: "2.PNG", text: "Our beautiful first date. ✨" },
+        { photo: "3.PNG", text: "My favorite smile. 🥰" },
+        { photo: "4.JPG", text: "You are my peace. 🫂" },
+        { photo: "5.PNG", text: "Always yours. 🔒" },
+        { photo: "6.JPG", text: "I have a question... 💌" }
+    ];
+
+    var opened = 0;
+    function openMemory(i){
+        document.getElementById("photo").src = memories[i-1].photo;
+        document.getElementById("text").innerText = memories[i-1].text;
+        document.getElementById("popup").style.display = "block";
+        opened++;
+    }
+
+    function closePopup(){
+        document.getElementById("popup").style.display = "none";
+        if(opened >= 6) document.getElementById("final").style.display = "block";
+    }
+
+    function yes() {
+        document.getElementById("final").innerHTML = "<h2>YES! ❤️</h2><p>I love you forever, Abbas! 💖</p>";
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    }
+
+    function createHearts() {
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.innerHTML = "❤️";
+            heart.style.position = "fixed";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.bottom = "0";
+            heart.style.fontSize = "20px";
+            heart.style.transition = "transform 5s linear, opacity 5s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.style.transform = "translateY(-100vh)"; heart.style.opacity = "0"; }, 100);
+            setTimeout(() => heart.remove(), 5000);
+        }, 500);
+    }
+</script>
+</body>
+</html>
